@@ -18,7 +18,11 @@ connectDB();
 const app = express();
 
 //middelwares
-app.use(cors());
+app.use(cors({
+  origin: "https://ecommerce-app-nine-zeta.vercel.app/", // Change this to your frontend URL
+  methods: ["GET", "POST"],
+  credentials: true,
+}));
 app.use(express.json());
 app.use(morgan("dev"));
 
