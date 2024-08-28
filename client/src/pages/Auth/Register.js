@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import Layout from "./../../components/Layout/Layout";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import "../../styles/AuthStyles.css";
+
 const Register = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -13,26 +13,35 @@ const Register = () => {
   const [answer, setAnswer] = useState("");
   const navigate = useNavigate();
 
-  // form function
+  // form function using fetch
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("/api/v1/auth/register", {
-        name,
-        email,
-        password,
-        phone,
-        address,
-        answer,
+      const response = await fetch("/api/v1/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          phone,
+          address,
+          answer,
+        }),
       });
-      if (res && res.data.success) {
-        toast.success(res.data && res.data.message);
+
+      const resData = await response.json();
+
+      if (response.ok && resData.success) {
+        toast.success(resData.message);
         navigate("/login");
       } else {
-        toast.error(res.data.message);
+        toast.error(resData.message || "Registration failed");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Something went wrong");
     }
   };
@@ -48,7 +57,7 @@ const Register = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="form-control"
-              id="exampleInputEmail1"
+              id="exampleInputName"
               placeholder="Enter Your Name"
               required
               autoFocus
@@ -60,8 +69,8 @@ const Register = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="form-control"
-              id="exampleInputEmail1"
-              placeholder="Enter Your Email "
+              id="exampleInputEmail"
+              placeholder="Enter Your Email"
               required
             />
           </div>
@@ -71,7 +80,7 @@ const Register = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="form-control"
-              id="exampleInputPassword1"
+              id="exampleInputPassword"
               placeholder="Enter Your Password"
               required
             />
@@ -82,7 +91,7 @@ const Register = () => {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               className="form-control"
-              id="exampleInputEmail1"
+              id="exampleInputPhone"
               placeholder="Enter Your Phone"
               required
             />
@@ -93,7 +102,7 @@ const Register = () => {
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               className="form-control"
-              id="exampleInputEmail1"
+              id="exampleInputAddress"
               placeholder="Enter Your Address"
               required
             />
@@ -104,8 +113,8 @@ const Register = () => {
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
               className="form-control"
-              id="exampleInputEmail1"
-              placeholder="What is Your Favorite sports"
+              id="exampleInputAnswer"
+              placeholder="What is Your Favorite Sport?"
               required
             />
           </div>
@@ -119,3 +128,4 @@ const Register = () => {
 };
 
 export default Register;
+
