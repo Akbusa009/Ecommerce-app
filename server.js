@@ -19,7 +19,7 @@ const app = express();
 
 //middelwares
 app.use(cors({
-  origin: "https://ecommerce-app-nine-zeta.vercel.app/", // Change this to your frontend URL
+  origin: "https://ecommerce-app-akbusa.vercel.app", // Change this to your frontend URL
   methods: ["GET", "POST"],
   credentials: true,
 }));
